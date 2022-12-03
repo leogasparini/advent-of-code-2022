@@ -22,7 +22,7 @@ public class Day1 : AdventOfCodeDay
 
     private static IEnumerable<int> GetTotalCaloriesPerElf()
     {
-        string inputPath = Path.Combine("Assets/day1.txt");
+        string inputPath = Path.Combine("Assets", "day1.txt");
         int elfCalories = 0;
         
         return File.ReadLines(inputPath)

@@ -1,4 +1,5 @@
-﻿using AdventOfCode.Days;
+﻿using System.Collections.Generic;
+using AdventOfCode.Days;
 
 IEnumerable<AdventOfCodeDay> solvedDays = new List<AdventOfCodeDay>()
 {

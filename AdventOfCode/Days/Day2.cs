@@ -103,7 +103,7 @@ public class Day2 : AdventOfCodeDay
 
     protected override string GetTask2Solution()
     {
-        string inputPath = Path.Combine("Assets/day2.txt");
+        string inputPath = Path.Combine("Assets", "day2.txt");
 
         return File.ReadLines(inputPath)
             .Select(round =>
