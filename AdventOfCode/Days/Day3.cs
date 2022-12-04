@@ -6,32 +6,36 @@ public class Day3 : AdventOfCodeDay
 
     protected override string GetTask1Solution()
     {
-        return GetItemsToArrange()
+        string inputPath = Path.Combine("Assets", "day3.txt");
+
+        return File.ReadLines(inputPath)
+            .Select(rucksack => rucksack.Take(rucksack.Length / 2)
+                .Intersect(rucksack.Skip(rucksack.Length / 2))
+                .Single())
             .Select(ToPriority)
             .Sum()
             .ToString();
     }
-    
-    private static IEnumerable<char> GetItemsToArrange()
+
+    protected override string GetTask2Solution()
     {
         string inputPath = Path.Combine("Assets", "day3.txt");
-        
-        return File.ReadLines(inputPath)
-            .Select(rucksack =>
-            {
-                int compartmentSize = rucksack.Length / 2;
-                string compartment1 = rucksack.Substring(0, compartmentSize);
-                string compartment2 = rucksack.Substring(compartmentSize, compartmentSize);
 
-                IEnumerable<char> compartment1Items = compartment1.Distinct();
-                IEnumerable<char> compartment2Items = compartment2.Distinct();
-                
-                return compartment1Items.Intersect(compartment2Items).Single();
-            });
+        return File.ReadLines(inputPath)
+            .Chunk(3)
+            .Select(group => group.First()
+                .Intersect(group.ElementAt(1))
+                .Intersect(group.ElementAt(2))
+                .Single())
+            .Select(ToPriority)
+            .Sum()
+            .ToString();
     }
 
-    private int ToPriority(char item)
+    private static int ToPriority(char item)
     {
-        return item >= 'a' ? item - 96 : item - 38;
+        return char.IsLower(item)
+            ? item - 96
+            : item - 38;
     }
 }
