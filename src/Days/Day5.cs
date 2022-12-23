@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Days;
@@ -6,44 +9,50 @@ public class Day5 : AdventOfCodeDay
 {
     protected override int GetDay() => 5;
 
-    private List<Stack<char>> _supplyStacks = new()
-    {
-        new Stack<char>(new[] { 'B', 'W', 'N' }),
-        new Stack<char>(new[] { 'L', 'Z', 'S', 'P', 'T', 'D', 'M', 'B' }),
-        new Stack<char>(new[] { 'Q', 'H', 'Z', 'W', 'R' }),
-        new Stack<char>(new[] { 'W', 'D', 'V', 'J', 'Z', 'R' }),
-        new Stack<char>(new[] { 'S', 'H', 'M', 'B' }),
-        new Stack<char>(new[] { 'L', 'G', 'N', 'J', 'H', 'V', 'P', 'B' }),
-        new Stack<char>(new[] { 'J', 'Q', 'Z', 'F', 'H', 'D', 'L', 'S' }),
-        new Stack<char>(new[] { 'W', 'S', 'F', 'J', 'G', 'Q', 'B' }),
-        new Stack<char>(new[] { 'Z', 'W', 'M', 'S', 'C', 'D', 'J' }),
-    };
-
     protected override string GetTask1Solution()
     {
         string inputPath = Path.Combine("Assets", "day5.txt");
         const string template = "move {0} from {1} to {2}";
+        List<Stack<char>> supplyStacks = GetSupplyStacks()
+            .Select(s => new Stack<char>(s))
+            .ToList();
 
         foreach (string line in File.ReadLines(inputPath))
         {
-            (int moveQty, int fromStack, int toStack) = ParseInstructions(template, line);
+            (int moveQty, int from, int to) = ParseInstructions(template, line);
+
+            Stack<char> source = supplyStacks.ElementAt(from - 1);
+            Stack<char> destination = supplyStacks.ElementAt(to - 1);
 
             for (int i = 0; i < moveQty; i++)
             {
-                char crate = _supplyStacks.ElementAt(fromStack - 1).Pop();
-                _supplyStacks.ElementAt(toStack - 1).Push(crate);
+                destination.Push(source.Pop());
             }
         }
 
-        return _supplyStacks.Aggregate("", (acc, cur) => acc + cur.Peek());
+        return supplyStacks.Aggregate("", (acc, cur) => acc + cur.Peek());
     }
 
     protected override string GetTask2Solution()
     {
-        return "";
+        string inputPath = Path.Combine("Assets", "day5.txt");
+        const string template = "move {0} from {1} to {2}";
+        List<List<char>> supplyStacks = GetSupplyStacks();
+
+        foreach (string line in File.ReadLines(inputPath))
+        {
+            (int moveQty, int from, int to) = ParseInstructions(template, line);
+
+            List<char> source = supplyStacks.ElementAt(from - 1);
+            List<char> destination = supplyStacks.ElementAt(to - 1);
+            destination.AddRange(source.TakeLast(moveQty));
+            source.RemoveRange(source.Count - moveQty, moveQty);
+        }
+
+        return supplyStacks.Aggregate("", (acc, cur) => acc + cur.Last());
     }
 
-    private (int moveQty, int fromStack, int toStack) ParseInstructions(string template, string value)
+    private (int moveQty, int from, int to) ParseInstructions(string template, string value)
     {
         string pattern = "^" + Regex.Replace(template, @"\{[0-9]+\}", "(.*?)") + "$";
 
@@ -58,4 +67,17 @@ public class Day5 : AdventOfCodeDay
 
         return (values.ElementAt(0), values.ElementAt(1), values.ElementAt(2));
     }
+
+    private List<List<char>> GetSupplyStacks() => new()
+    {
+        new() { 'B', 'W', 'N' },
+        new() { 'L', 'Z', 'S', 'P', 'T', 'D', 'M', 'B' },
+        new() { 'Q', 'H', 'Z', 'W', 'R' },
+        new() { 'W', 'D', 'V', 'J', 'Z', 'R' },
+        new() { 'S', 'H', 'M', 'B' },
+        new() { 'L', 'G', 'N', 'J', 'H', 'V', 'P', 'B' },
+        new() { 'J', 'Q', 'Z', 'F', 'H', 'D', 'L', 'S' },
+        new() { 'W', 'S', 'F', 'J', 'G', 'Q', 'B' },
+        new() { 'Z', 'W', 'M', 'S', 'C', 'D', 'J' },
+    };
 }
