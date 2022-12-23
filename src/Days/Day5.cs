@@ -38,6 +38,11 @@ public class Day5 : AdventOfCodeDay
         return _supplyStacks.Aggregate("", (acc, cur) => acc + cur.Peek());
     }
 
+    protected override string GetTask2Solution()
+    {
+        return "";
+    }
+
     private (int moveQty, int fromStack, int toStack) ParseInstructions(string template, string value)
     {
         string pattern = "^" + Regex.Replace(template, @"\{[0-9]+\}", "(.*?)") + "$";
