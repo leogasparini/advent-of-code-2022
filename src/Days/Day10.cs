@@ -74,15 +74,10 @@ public class Day10 : AdventOfCodeDay
 
     private sealed class CrtScreen
     {
-        private readonly int _height;
-        private readonly int _width;
         private readonly char[][] _screen = Array.Empty<char[]>();
 
         public CrtScreen(int height, int width)
         {
-            _height = height;
-            _width = width;
-
             Array.Resize(ref _screen, height);
             for (int i = 0; i < _screen.Length; i++)
             {
@@ -95,21 +90,7 @@ public class Day10 : AdventOfCodeDay
             _screen[row][col] = value;
         }
 
-        public string Draw()
-        {
-            string output = "";
-
-            for (int i = 0; i < _height; i++)
-            {
-                for (int j = 0; j < _width; j++)
-                {
-                    output += _screen[i][j];
-                }
-
-                output += Environment.NewLine;
-            }
-
-            return output;
-        }
+        public string Draw() =>
+            _screen.Aggregate("", (acc, cur) => acc + new string(cur) + Environment.NewLine);
     }
 }
