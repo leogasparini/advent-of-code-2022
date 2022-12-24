@@ -16,7 +16,7 @@ public class Day11Tests : Day11
     [Fact]
     public void GetTask2Solution_ShouldReturnExpectedSolution()
     {
-        string expected = "TODO";
+        string expected = "17673687232";
         string actual = GetTask2Solution();
         
         Assert.Equal(expected, actual);
