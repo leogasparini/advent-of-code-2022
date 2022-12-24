@@ -6,42 +6,12 @@ public class Day9 : AdventOfCodeDay
 
     protected override string GetTask1Solution()
     {
-        string inputPath = Path.Combine("Assets", "day9.txt");
-        HashSet<Knot> visitedPositions = new();
-        Rope rope = new(2);
-
-        foreach (string line in File.ReadLines(inputPath))
-        {
-            (string direction, int steps) = ParseInstructions(line);
-
-            for (int i = 0; i < steps; i++)
-            {
-                rope.MoveHead(direction);
-                visitedPositions.Add(rope.Tail);
-            }
-        }
-
-        return visitedPositions.Count.ToString();
+        return GetTailDistinctPositionsCount(2).ToString();
     }
 
     protected override string GetTask2Solution()
     {
-        string inputPath = Path.Combine("Assets", "day9.txt");
-        HashSet<Knot> visitedPositions = new();
-        Rope rope = new(10);
-
-        foreach (string line in File.ReadLines(inputPath))
-        {
-            (string direction, int steps) = ParseInstructions(line);
-
-            for (int i = 0; i < steps; i++)
-            {
-                rope.MoveHead(direction);
-                visitedPositions.Add(rope.Tail);
-            }
-        }
-
-        return visitedPositions.Count.ToString();
+        return GetTailDistinctPositionsCount(10).ToString();
     }
 
     private (string direction, int steps) ParseInstructions(string line)
@@ -51,16 +21,36 @@ public class Day9 : AdventOfCodeDay
         return (instructions.First(), int.Parse(instructions.Last()));
     }
 
+    private int GetTailDistinctPositionsCount(int knotsCount)
+    {
+        string inputPath = Path.Combine("Assets", "day9.txt");
+        HashSet<Knot> visitedPositions = new();
+        Rope rope = new(knotsCount);
+
+        foreach (string line in File.ReadLines(inputPath))
+        {
+            (string direction, int steps) = ParseInstructions(line);
+
+            for (int i = 0; i < steps; i++)
+            {
+                rope.MoveHead(direction);
+                visitedPositions.Add(rope.Tail);
+            }
+        }
+
+        return visitedPositions.Count;
+    }
+
     private sealed record Knot
     {
         public int X { get; set; }
         public int Y { get; set; }
     }
-    
+
     private sealed class Rope
     {
         private readonly Queue<Knot> _knots = new();
-        
+
         public Knot Tail => _knots.Last();
 
         public Rope(int knotsCount)
@@ -74,7 +64,7 @@ public class Day9 : AdventOfCodeDay
         public void MoveHead(string direction)
         {
             Knot head = _knots.First();
-            
+
             switch (direction)
             {
                 case "U":
@@ -101,6 +91,7 @@ public class Day9 : AdventOfCodeDay
             Knot nextKnot = _knots.ElementAt(nextIndex);
             int distanceX = Math.Abs(movedKnot.X - nextKnot.X);
             int distanceY = Math.Abs(movedKnot.Y - nextKnot.Y);
+            bool hasNext = _knots.Count - 1 > nextIndex;
 
             if (distanceX > 1)
             {
@@ -122,7 +113,7 @@ public class Day9 : AdventOfCodeDay
                 }
             }
 
-            if (_knots.Count - 1 > nextIndex)
+            if (hasNext)
                 MoveNextKnot(nextKnot, nextIndex + 1);
         }
     }
