@@ -17,7 +17,7 @@ public class Day7 : AdventOfCodeDay
 
         void ComputeFreeableSpace()
         {
-            int dirSize = currentItem.GetSize();
+            int dirSize = currentItem.GetTotalSize();
             if (dirSize <= 100000)
             {
                 freeableSpace += dirSize;
@@ -33,7 +33,34 @@ public class Day7 : AdventOfCodeDay
 
     protected override string GetTask2Solution()
     {
-        return base.GetTask2Solution();
+        const int diskSize = 70_000_000;
+        const int requiredUnusedSpace = 30_000_000;
+        DeviceItem root = BuildFileSystem();
+        int usedSpace = root.GetTotalSize();
+        int spaceToFreeUp = requiredUnusedSpace - (diskSize - usedSpace);
+        DeviceItem deletableDir = root;
+        int deletableDirSize = deletableDir.GetTotalSize();
+        DeviceItem currentDir = root;
+
+        FindDeletableDirectory();
+        
+        return deletableDirSize.ToString();
+        
+        void FindDeletableDirectory()
+        {
+            foreach (DeviceItem directory in currentDir.Directories)
+            {
+                int totalSize = directory.GetTotalSize();
+                if (totalSize >= spaceToFreeUp && totalSize <= deletableDirSize)
+                {
+                    deletableDir = directory;
+                    deletableDirSize = deletableDir.GetTotalSize();
+                }
+
+                currentDir = directory;
+                FindDeletableDirectory();
+            }
+        }
     }
 
     private DeviceItem BuildFileSystem()
@@ -108,7 +135,6 @@ internal sealed record DeviceItem
     public string Name { get; init; } = default!;
     public int Size { get; init; }
     public HashSet<DeviceItem> Children { get; } = new();
-    public ImmutableHashSet<DeviceItem> Files => Children.Where(c => !c.IsDir).ToImmutableHashSet();
     public ImmutableHashSet<DeviceItem> Directories => Children.Where(c => c.IsDir).ToImmutableHashSet();
     public DeviceItem? Parent { get; private set; }
 
@@ -118,13 +144,13 @@ internal sealed record DeviceItem
         Children.Add(item);
     }
 
-    public int GetSize()
+    public int GetTotalSize()
     {
         int filesSize = Size;
         
         foreach (DeviceItem child in Children)
         {
-            filesSize += child.GetSize();
+            filesSize += child.GetTotalSize();
         }
         
         return filesSize;
