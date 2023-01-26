@@ -4,7 +4,7 @@ public class Day8 : AdventOfCodeDay
 {
     protected override int GetDay() => 8;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         int[][] trees = GetTreesMatrix();
         int rowsCount = trees.Length;
@@ -70,7 +70,7 @@ public class Day8 : AdventOfCodeDay
         }
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         int[][] trees = GetTreesMatrix();
         int rowsCount = trees.Length;

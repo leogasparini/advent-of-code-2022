@@ -4,7 +4,7 @@ public class Day3 : AdventOfCodeDay
 {
     protected override int GetDay() => 3;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         string inputPath = Path.Combine("Assets", "day3.txt");
 
@@ -17,7 +17,7 @@ public class Day3 : AdventOfCodeDay
             .ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         string inputPath = Path.Combine("Assets", "day3.txt");
 

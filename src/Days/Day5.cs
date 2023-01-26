@@ -6,7 +6,7 @@ public class Day5 : AdventOfCodeDay
 {
     protected override int GetDay() => 5;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         string inputPath = Path.Combine("Assets", "day5.txt");
         const string template = "move {0} from {1} to {2}";
@@ -30,7 +30,7 @@ public class Day5 : AdventOfCodeDay
         return supplyStacks.Aggregate("", (acc, cur) => acc + cur.Peek());
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         string inputPath = Path.Combine("Assets", "day5.txt");
         const string template = "move {0} from {1} to {2}";

@@ -4,7 +4,7 @@ public class Day10 : AdventOfCodeDay
 {
     protected override int GetDay() => 10;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         string inputPath = Path.Combine("Assets", "day10.txt");
         int X = 1;
@@ -29,7 +29,7 @@ public class Day10 : AdventOfCodeDay
         return signalStrengths.Sum().ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         string inputPath = Path.Combine("Assets", "day10.txt");
         const int height = 6;

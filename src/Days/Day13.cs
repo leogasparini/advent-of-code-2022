@@ -6,7 +6,7 @@ public class Day13 : AdventOfCodeDay
 {
     protected override int GetDay() => 13;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         int sortedIndexesSum = 0;
         List<(JsonElement, JsonElement)> pairs = GetPairs();
@@ -37,7 +37,7 @@ public class Day13 : AdventOfCodeDay
         }
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         int decoderKey = 0;
         List<JsonElement> packets = GetPackets();

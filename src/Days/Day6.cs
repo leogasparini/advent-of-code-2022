@@ -4,12 +4,12 @@ public class Day6 : AdventOfCodeDay
 {
     protected override int GetDay() => 6;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         return getPacketIndex(4).ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         return getPacketIndex(14).ToString();
     }

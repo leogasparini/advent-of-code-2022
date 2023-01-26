@@ -6,7 +6,7 @@ public class Day7 : AdventOfCodeDay
 {
     protected override int GetDay() => 7;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         int freeableSpace = 0;
         DeviceItem currentItem = BuildFileSystem();
@@ -31,7 +31,7 @@ public class Day7 : AdventOfCodeDay
         }
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         const int diskSize = 70_000_000;
         const int requiredUnusedSpace = 30_000_000;

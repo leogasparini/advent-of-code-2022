@@ -5,8 +5,8 @@ namespace AdventOfCode.Days;
 public abstract class AdventOfCodeDay
 {
     protected abstract int GetDay();
-    protected virtual string GetTask1Solution() => "TODO";
-    protected virtual string GetTask2Solution() => "TODO";
+    public virtual string GetTask1Solution() => "TODO";
+    public virtual string GetTask2Solution() => "TODO";
 
     public void PrintSolutions()
     {

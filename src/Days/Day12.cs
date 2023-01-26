@@ -4,14 +4,14 @@ public class Day12 : AdventOfCodeDay
 {
     protected override int GetDay() => 12;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         (int[,] map, (int x, int y) start, (int x, int y) end) = BuildHeightMap();
 
         return GetShortestPathSteps(map, new[] { start }, end).ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         (int[,] map, _, (int x, int y) end) = BuildHeightMap();
         List<(int x, int y)> starts = new();

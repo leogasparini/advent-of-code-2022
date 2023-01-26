@@ -7,7 +7,7 @@ public class Day14 : AdventOfCodeDay
     protected override int GetDay() => 14;
     private readonly (int, int) _sandPouringPoint = (500, 0);
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         List<List<(int x, int y)>> traces = GetTraces();
         FramedCave cave = new(traces, _sandPouringPoint);
@@ -18,7 +18,7 @@ public class Day14 : AdventOfCodeDay
         return filledUnits.ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         List<List<(int x, int y)>> traces = GetTraces();
 
@@ -35,7 +35,7 @@ public class Day14 : AdventOfCodeDay
         EndlessCave cave = new(traces, _sandPouringPoint);
 
         int filledUnits = cave.FillWithSand();
-        cave.Display();
+        cave.Display(false);
 
         return filledUnits.ToString();
     }
@@ -65,23 +65,18 @@ public class Day14 : AdventOfCodeDay
 
     private abstract class Cave
     {
-        private readonly List<List<(int x, int y)>> _traces;
+        protected readonly List<List<(int x, int y)>> Traces;
 
         protected readonly (int x, int y) SandPouringPoint;
         protected readonly Dictionary<(int x, int y), char> Map = new();
         protected int Height => GetHeight();
-        protected int Width => GetWidth();
-        protected int TracesMinX => GetTracesMinX();
-        protected int TracesMaxX => GetTracesMaxX();
-        protected int TracesMinY => GetTracesMinY();
-        protected int TracesMaxY => GetTracesMaxY();
 
         protected Cave(
             List<List<(int x, int y)>> traces,
             (int x, int y) sandPouringPoint)
         {
             SandPouringPoint = sandPouringPoint;
-            _traces = traces;
+            Traces = traces;
 
             DrawRocks();
         }
@@ -91,31 +86,6 @@ public class Day14 : AdventOfCodeDay
             return Map.Max(i => i.Key.y);
         }
 
-        private int GetWidth()
-        {
-            return Map.Max(i => i.Key.x);
-        }
-
-        private int GetTracesMinX()
-        {
-            return _traces.Min(t => t.Min(p => p.x));
-        }
-
-        private int GetTracesMaxX()
-        {
-            return _traces.Max(t => t.Max(p => p.x));
-        }
-
-        private int GetTracesMinY()
-        {
-            return _traces.Min(t => t.Min(p => p.y));
-        }
-
-        private int GetTracesMaxY()
-        {
-            return _traces.Max(t => t.Max(p => p.y));
-        }
-
         private void DrawSandPouringPoint()
         {
             Map[SandPouringPoint] = '+';
@@ -123,7 +93,7 @@ public class Day14 : AdventOfCodeDay
 
         private void DrawRocks()
         {
-            foreach (List<(int x, int y)> trace in _traces)
+            foreach (List<(int x, int y)> trace in Traces)
             {
                 (int prevX, int prevY) = trace.First();
 
@@ -151,26 +121,30 @@ public class Day14 : AdventOfCodeDay
 
         public void Display(bool highlightSandPouringPoint = true)
         {
-            string output = "";
             int heightLength = Height.ToString().Length;
+
+            int minX = Map.Min(t => t.Key.x);
+            int maxX = Map.Max(t => t.Key.x);
+            int maxY = Map.Max(t => t.Key.y);
 
             if (highlightSandPouringPoint)
                 DrawSandPouringPoint();
 
-            for (int y = 0; y <= TracesMaxY; y++)
+            for (int y = 0; y <= maxY; y++)
             {
-                output += y.ToString().PadLeft(heightLength).PadRight(heightLength + 1);
+                Console.Write(y.ToString().PadLeft(heightLength).PadRight(heightLength + 1));
+                Console.Write(" ");
 
-                for (int x = TracesMinX; x <= TracesMaxX; x++)
+                for (int x = minX; x <= maxX; x++)
                 {
                     (int, int) point = (x, y);
-                    output += !Map.ContainsKey(point) || Map[point] == 0 ? '.' : Map[point];
+                    Console.Write(!Map.ContainsKey(point) || Map[point] == 0 ? '.' : Map[point]);
                 }
 
-                output += Environment.NewLine;
+                Console.WriteLine();
             }
 
-            Console.WriteLine(output);
+            Console.WriteLine();
         }
     }
 
@@ -189,18 +163,21 @@ public class Day14 : AdventOfCodeDay
             HashSet<(int, int)> visited = new();
             queue.Enqueue(SandPouringPoint);
 
+            int maxX = Traces.Max(t => t.Max(p => p.x));
+            int maxY = Traces.Max(t => t.Max(p => p.y));
+
             while (queue.Any())
             {
                 (int x, int y) = queue.Dequeue();
 
                 visited.Add((x, y));
 
-                if (y == TracesMaxY)
+                if (y == maxY)
                     break;
 
-                (int, int) bottom = (x, Math.Min(y + 1, TracesMaxY));
-                (int, int) bottomLeft = (Math.Max(x - 1, 0), Math.Min(y + 1, TracesMaxY));
-                (int, int) bottomRight = (Math.Min(x + 1, TracesMaxX), Math.Min(y + 1, TracesMaxY));
+                (int, int) bottom = (x, Math.Min(y + 1, maxY));
+                (int, int) bottomLeft = (Math.Max(x - 1, 0), Math.Min(y + 1, maxY));
+                (int, int) bottomRight = (Math.Min(x + 1, maxX), Math.Min(y + 1, maxY));
 
                 if (!Map.ContainsKey(bottom))
                     Map[bottom] = (char)0;
@@ -255,11 +232,13 @@ public class Day14 : AdventOfCodeDay
             Queue<(int, int)> queue = new();
             queue.Enqueue(SandPouringPoint);
 
+            int maxY = Traces.Max(t => t.Max(p => p.y));
+
             while (queue.Any())
             {
                 (int x, int y) = queue.Dequeue();
-                int bottomY = Math.Min(y + 1, TracesMaxY);
-                bool isTouchingBottom = bottomY == TracesMaxY;
+                int bottomY = Math.Min(y + 1, maxY);
+                bool isTouchingBottom = bottomY == maxY;
 
                 (int, int) bottom = (x, bottomY);
                 (int, int) bottomLeft = (x - 1, bottomY);
@@ -290,10 +269,10 @@ public class Day14 : AdventOfCodeDay
                 {
                     pouredCount++;
                     Map[(x, y)] = 'o';
-                    
-                    if(y == 0)
+
+                    if (y == 0)
                         break;
-                    
+
                     queue.Enqueue(SandPouringPoint);
                 }
             }

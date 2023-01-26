@@ -4,14 +4,14 @@ public class Day1 : AdventOfCodeDay
 {
     protected override int GetDay() => 1;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         return GetTotalCaloriesPerElf()
             .Max(i => i)
             .ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         return GetTotalCaloriesPerElf()
             .OrderByDescending(i => i)

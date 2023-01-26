@@ -6,7 +6,7 @@ public class Day11 : AdventOfCodeDay
 {
     protected override int GetDay() => 11;
 
-    protected override string GetTask1Solution()
+    public override string GetTask1Solution()
     {
         const int rounds = 20;
         MonkeyInTheMiddle monkeyInTheMiddle = new(GetMonkeys(), n => n / 3);
@@ -19,7 +19,7 @@ public class Day11 : AdventOfCodeDay
         return monkeyBusiness.ToString();
     }
 
-    protected override string GetTask2Solution()
+    public override string GetTask2Solution()
     {
         const int rounds = 10_000;
         long divider = 11 * 3 * 5 * 7 * 19 * 2 * 13 * 17;
