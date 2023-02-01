@@ -5,5 +5,5 @@ Just sharing some fun.
 Run the following command to see all the results:
 
 ```
-cd AdventOfCode && dotnet run
+dotnet run
 ```
